@@ -4,24 +4,23 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpassword
+      MYSQL_ROOT_PASSWORD: utec
+      MYSQL_DATABASE: dbcloud
+      MYSQL_USER: root
+      MYSQL_PASSWORD: utec
     ports:
-      - "3306:3306"
+      - "8005:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
 
   app:
     build: .
     environment:
-      FLASK_ENV: development
-      DATABASE_URI: "mysql+pymysql://testuser:testpassword@db/testdb"
+      - DATABASE_URI=mysql+pymysql://root:utec@db:3306/dbcloud
     ports:
       - "8014:8014"
     depends_on:
       - db
 
 volumes:
-  db_data:
+  mysql_data:
