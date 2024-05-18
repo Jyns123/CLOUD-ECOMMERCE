@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: utec
+      MYSQL_DATABASE: dbcloud
+      MYSQL_USER: root
+      MYSQL_PASSWORD: utec
+    ports:
+      - "8005:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    environment:
+      - DATABASE_URI=mysql+pymysql://root:utec@db:3306/dbcloud
+    ports:
+      - "8014:8014"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
