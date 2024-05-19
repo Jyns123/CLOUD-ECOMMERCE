@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard de Doctores</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Doctores</h1>
+        <ul>
+            {% for medicamento in medicamentos %}
+            <li>{{ medicamento.nombre }} - Tipo: {{ medicamento.tipo_id }} - Marca: {{ medicamento.marca_id }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

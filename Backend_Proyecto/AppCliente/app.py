@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flasgger import Swagger, swag_from
 
 # Flask/SQLAlchemy instance
 app = Flask(__name__)
@@ -8,6 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:utec@52.206.143.13
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
+swagger = Swagger(app)
 
 # Cliente Model
 class Cliente(db.Model):
@@ -53,6 +55,22 @@ def internal_server_error(error):
 
 # CREATE Cita
 @app.route('/cita', methods=['POST'])
+@swag_from({
+    'responses': {
+        201: {
+            'description': 'Cita created successfully',
+            'examples': {
+                'application/json': {'message': 'Cita created successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def crear_cita():
     data = request.get_json()
     
@@ -71,6 +89,16 @@ def crear_cita():
 
 # READ (all) Cita
 @app.route('/cita', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'List of citas',
+            'examples': {
+                'application/json': [{'code': 1, 'cliente_dni': '12345678', 'doctor_id': 1, 'date': '2023-05-19T14:30:00'}]
+            }
+        }
+    }
+})
 def get_citas():
     citas = Cita.query.all()
     return jsonify([{
@@ -82,6 +110,22 @@ def get_citas():
 
 # READ (each) Cita
 @app.route('/cita/<int:id>', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Cita details',
+            'examples': {
+                'application/json': {'code': 1, 'cliente_dni': '12345678', 'doctor_id': 1, 'date': '2023-05-19T14:30:00'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def get_cita(id):
     cita = Cita.query.get(id)
     if cita is None:
@@ -96,6 +140,22 @@ def get_cita(id):
 
 # UPDATE Cita
 @app.route('/cita/<int:id>', methods=['PATCH'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Cita updated successfully',
+            'examples': {
+                'application/json': {'message': 'Cita updated successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def update_cita(id):
     cita = Cita.query.get(id)
     if cita is None:
@@ -125,6 +185,22 @@ def update_cita(id):
 
 # DELETE Cita
 @app.route('/cita/<int:id>', methods=['DELETE'])
+@swag_from({
+    'responses': {
+        204: {
+            'description': 'Cita deleted successfully',
+            'examples': {
+                'application/json': {'message': 'Cita deleted successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def delete_cita(id):
     cita = Cita.query.get(id)
     if cita is None:
@@ -136,6 +212,16 @@ def delete_cita(id):
 
 # CREATE Cliente
 @app.route('/cliente', methods=['POST'])
+@swag_from({
+    'responses': {
+        201: {
+            'description': 'Cliente created successfully',
+            'examples': {
+                'application/json': {'message': 'Cliente created successfully'}
+            }
+        }
+    }
+})
 def create_cliente():
     data = request.get_json()
     cliente = Cliente(dni=data['dni'], nombre=data['nombre'], apellido=data['apellido'])
@@ -145,6 +231,16 @@ def create_cliente():
 
 # READ (all) Cliente
 @app.route('/cliente', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'List of clientes',
+            'examples': {
+                'application/json': [{'dni': '12345678', 'nombre': 'Juan', 'apellido': 'Perez'}]
+            }
+        }
+    }
+})
 def get_clientes():
     clientes = Cliente.query.all()
     return jsonify([{
@@ -155,6 +251,22 @@ def get_clientes():
 
 # READ (each) Cliente
 @app.route('/cliente/<string:dni>', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Cliente details',
+            'examples': {
+                'application/json': {'dni': '12345678', 'nombre': 'Juan', 'apellido': 'Perez'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def get_cliente(dni):
     cliente = Cliente.query.get(dni)
     if cliente is None:
@@ -168,6 +280,22 @@ def get_cliente(dni):
 
 # UPDATE Cliente
 @app.route('/cliente/<string:dni>', methods=['PATCH'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Cliente updated successfully',
+            'examples': {
+                'application/json': {'message': 'Cliente updated successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def update_cliente(dni):
     cliente = Cliente.query.get(dni)
     if cliente is None:
@@ -186,6 +314,22 @@ def update_cliente(dni):
 
 # DELETE Cliente
 @app.route('/cliente/<string:dni>', methods=['DELETE'])
+@swag_from({
+    'responses': {
+        204: {
+            'description': 'Cliente deleted successfully',
+            'examples': {
+                'application/json': {'message': 'Cliente deleted successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def delete_cliente(dni):
     cliente = Cliente.query.get(dni)
     if cliente is None:
@@ -197,6 +341,16 @@ def delete_cliente(dni):
 
 # CREATE Doctor
 @app.route('/doctor', methods=['POST'])
+@swag_from({
+    'responses': {
+        201: {
+            'description': 'Doctor created successfully',
+            'examples': {
+                'application/json': {'message': 'Doctor created successfully'}
+            }
+        }
+    }
+})
 def create_doctor():
     data = request.get_json()
     doctor = Doctor(nombre=data['nombre'], apellido=data['apellido'], sexo=data['sexo'], image=data['image'])
@@ -206,6 +360,16 @@ def create_doctor():
 
 # READ (all) Doctor
 @app.route('/doctor', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'List of doctors',
+            'examples': {
+                'application/json': [{'id': 1, 'nombre': 'Dr. Smith', 'apellido': 'Johnson', 'sexo': 'M', 'image': 'image1.jpg'}]
+            }
+        }
+    }
+})
 def get_doctors():
     doctors = Doctor.query.all()
     return jsonify([{
@@ -218,6 +382,22 @@ def get_doctors():
 
 # READ (each) Doctor
 @app.route('/doctor/<int:id>', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Doctor details',
+            'examples': {
+                'application/json': {'id': 1, 'nombre': 'Dr. Smith', 'apellido': 'Johnson', 'sexo': 'M', 'image': 'image1.jpg'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def get_doctor(id):
     doctor = Doctor.query.get(id)
     if doctor is None:
@@ -233,6 +413,22 @@ def get_doctor(id):
 
 # UPDATE Doctor
 @app.route('/doctor/<int:id>', methods=['PATCH'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Doctor updated successfully',
+            'examples': {
+                'application/json': {'message': 'Doctor updated successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def update_doctor(id):
     doctor = Doctor.query.get(id)
     if doctor is None:
@@ -257,6 +453,22 @@ def update_doctor(id):
 
 # DELETE Doctor
 @app.route('/doctor/<int:id>', methods=['DELETE'])
+@swag_from({
+    'responses': {
+        204: {
+            'description': 'Doctor deleted successfully',
+            'examples': {
+                'application/json': {'message': 'Doctor deleted successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def delete_doctor(id):
     doctor = Doctor.query.get(id)
     if doctor is None:

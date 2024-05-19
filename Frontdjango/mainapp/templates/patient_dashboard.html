@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard de Pacientes</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Pacientes</h1>
+        <ul>
+            {% for paciente in pacientes %}
+            <li>{{ paciente.nombre }} {{ paciente.apellido }} - {{ paciente.dni }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

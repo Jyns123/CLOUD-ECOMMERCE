@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flasgger import Swagger, swag_from
 import os
 
 # Flask/SQLAlchemy instance
@@ -9,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', "my
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
+swagger = Swagger(app)
 
 # Models
 class Tipo(db.Model):
@@ -42,11 +44,31 @@ def internal_server_error(error):
 
 # CRUD for Tipo
 @app.route('/tipos', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'List of tipos',
+            'examples': {
+                'application/json': [{'id': 1, 'nombre': 'Analgesico'}, {'id': 2, 'nombre': 'Antibiotico'}]
+            }
+        }
+    }
+})
 def get_tipos():
     tipos = Tipo.query.all()
     return jsonify([{'id': tipo.id, 'nombre': tipo.nombre} for tipo in tipos]), 200
 
 @app.route('/tipos', methods=['POST'])
+@swag_from({
+    'responses': {
+        201: {
+            'description': 'Tipo created successfully',
+            'examples': {
+                'application/json': {'message': 'Tipo created successfully'}
+            }
+        }
+    }
+})
 def create_tipo():
     data = request.get_json()
     tipo = Tipo(nombre=data['nombre'])
@@ -55,6 +77,22 @@ def create_tipo():
     return jsonify({'message': 'Tipo created successfully'}), 201
 
 @app.route('/tipos/<int:id>', methods=['PUT'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Tipo updated successfully',
+            'examples': {
+                'application/json': {'message': 'Tipo updated successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def update_tipo(id):
     tipo = Tipo.query.get(id)
     if tipo is None:
@@ -65,6 +103,22 @@ def update_tipo(id):
     return jsonify({'message': 'Tipo updated successfully'}), 200
 
 @app.route('/tipos/<int:id>', methods=['DELETE'])
+@swag_from({
+    'responses': {
+        204: {
+            'description': 'Tipo deleted successfully',
+            'examples': {
+                'application/json': {'message': 'Tipo deleted successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def delete_tipo(id):
     tipo = Tipo.query.get(id)
     if tipo is None:
@@ -75,11 +129,31 @@ def delete_tipo(id):
 
 # CRUD for Marca
 @app.route('/marcas', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'List of marcas',
+            'examples': {
+                'application/json': [{'id': 1, 'nombre': 'Marca1'}, {'id': 2, 'nombre': 'Marca2'}]
+            }
+        }
+    }
+})
 def get_marcas():
     marcas = Marca.query.all()
     return jsonify([{'id': marca.id, 'nombre': marca.nombre} for marca in marcas]), 200
 
 @app.route('/marcas', methods=['POST'])
+@swag_from({
+    'responses': {
+        201: {
+            'description': 'Marca created successfully',
+            'examples': {
+                'application/json': {'message': 'Marca created successfully'}
+            }
+        }
+    }
+})
 def create_marca():
     data = request.get_json()
     marca = Marca(nombre=data['nombre'])
@@ -88,6 +162,22 @@ def create_marca():
     return jsonify({'message': 'Marca created successfully'}), 201
 
 @app.route('/marcas/<int:id>', methods=['PUT'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Marca updated successfully',
+            'examples': {
+                'application/json': {'message': 'Marca updated successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def update_marca(id):
     marca = Marca.query.get(id)
     if marca is None:
@@ -98,6 +188,22 @@ def update_marca(id):
     return jsonify({'message': 'Marca updated successfully'}), 200
 
 @app.route('/marcas/<int:id>', methods=['DELETE'])
+@swag_from({
+    'responses': {
+        204: {
+            'description': 'Marca deleted successfully',
+            'examples': {
+                'application/json': {'message': 'Marca deleted successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def delete_marca(id):
     marca = Marca.query.get(id)
     if marca is None:
@@ -108,11 +214,31 @@ def delete_marca(id):
 
 # CRUD for Medicamento
 @app.route('/medicamentos', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'List of medicamentos',
+            'examples': {
+                'application/json': [{'id': 1, 'nombre': 'Med1', 'tipo_id': 1, 'marca_id': 1}, {'id': 2, 'nombre': 'Med2', 'tipo_id': 2, 'marca_id': 2}]
+            }
+        }
+    }
+})
 def get_medicamentos():
     medicamentos = Medicamento.query.all()
     return jsonify([{'id': medicamento.id, 'nombre': medicamento.nombre, 'tipo_id': medicamento.tipo_id, 'marca_id': medicamento.marca_id} for medicamento in medicamentos]), 200
 
 @app.route('/medicamentos', methods=['POST'])
+@swag_from({
+    'responses': {
+        201: {
+            'description': 'Medicamento created successfully',
+            'examples': {
+                'application/json': {'message': 'Medicamento created successfully'}
+            }
+        }
+    }
+})
 def create_medicamento():
     data = request.get_json()
     medicamento = Medicamento(nombre=data['nombre'], tipo_id=data['tipo_id'], marca_id=data['marca_id'])
@@ -121,6 +247,22 @@ def create_medicamento():
     return jsonify({'message': 'Medicamento created successfully'}), 201
 
 @app.route('/medicamentos/<int:id>', methods=['PUT'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Medicamento updated successfully',
+            'examples': {
+                'application/json': {'message': 'Medicamento updated successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def update_medicamento(id):
     medicamento = Medicamento.query.get(id)
     if medicamento is None:
@@ -133,6 +275,22 @@ def update_medicamento(id):
     return jsonify({'message': 'Medicamento updated successfully'}), 200
 
 @app.route('/medicamentos/<int:id>', methods=['DELETE'])
+@swag_from({
+    'responses': {
+        204: {
+            'description': 'Medicamento deleted successfully',
+            'examples': {
+                'application/json': {'message': 'Medicamento deleted successfully'}
+            }
+        },
+        404: {
+            'description': 'Not found',
+            'examples': {
+                'application/json': {'error': 'Not found.'}
+            }
+        }
+    }
+})
 def delete_medicamento(id):
     medicamento = Medicamento.query.get(id)
     if medicamento is None:

@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  flask_app:
+  appcliente:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: flask_app
+    container_name: appcliente
     restart: unless-stopped
     ports:
       - "8014:8014"

@@ -1,6 +1,6 @@
 Flask
 Flask-SQLAlchemy
-SQLAlchemy
 flask-cors
-Werkzeug
-pymysql==1.0.2
+pymysql
+werkzeug
+flasgger
