@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  appmeds:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appmeds
+    restart: unless-stopped
+    ports:
+      - "8016:8016"
+    environment:
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:utec@52.206.143.132:8005/dbMeds
+      - FLASK_ENV=development

@@ -54,5 +54,7 @@ def create_user():
     db.session.commit()
     return jsonify({'message': 'User created successfully'}), 201
 
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
