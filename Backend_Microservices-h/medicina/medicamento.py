@@ -28,8 +28,6 @@ class Medicamento(db.Model):
     Nombre_M = db.Column(db.String(30), nullable = False)
     fecha_V = db.Column(db.DateTime, nullable = False)
     doctor_ID = db.Column(db.Integer, db.ForeignKey('Doctor.ID'), nullable = False)
-    doctor_Nombre = db.Column(db.Integer, db.ForeignKey('Doctor.Nombre'), nullable = False)
-    doctor_Apellido = db.Column(db.Integer, db.ForeignKey('Doctor.Apellido'), nullable = False)
 
 # 404 Error Handler
 @medicamento_api.errorhandler(404)
@@ -63,8 +61,6 @@ def get_Medicamentos():
     return jsonify([{'Serie': medicamento.serie,
                      'Nombre_Medicamento': medicamento.Nombre,
                      'Doctor_ID': medicamento.doctor_ID,
-                     'Doctor_Nombre': medicamento.doctor_Nombre,
-                     'Doctor_Apellido': medicamento.doctor_Nombre,
                      'Fecha_V': medicamento.fecha_V,
                     } for medicamento in medicamento]), 200
 
@@ -78,8 +74,6 @@ def get_medicamento(id):
     return jsonify({'Serie': medicamento.serie,
                      'Nombre_Medicamento': medicamento.Nombre,
                      'Doctor_ID': medicamento.doctor_ID,
-                     'Doctor_Nombre': medicamento.doctor_Nombre,
-                     'Doctor_Apellido': medicamento.doctor_Nombre,
                      'Fecha_V': medicamento.fecha_V
                      }), 200
 
