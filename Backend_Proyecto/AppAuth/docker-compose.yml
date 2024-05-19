@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  appauth:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appauth
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:utec@52.206.143.132:8005/dbLogin
+      - FLASK_ENV=development
