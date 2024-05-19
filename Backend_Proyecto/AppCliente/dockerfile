@@ -1,17 +1,18 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.9
+# Usa una imagen base de Python
+FROM python:3.9-slim
 
-# Set the working directory
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copy the requirements file
-COPY requirements.txt .
-
-# Install the dependencies
+# Copia los archivos de requerimientos y los instala
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copia el código de la aplicación
 COPY . .
 
-# Specify the command to run the application
+# Expone el puerto en el que correrá la aplicación
+EXPOSE 8014
+
+# Comando para correr la aplicación
 CMD ["python", "app.py"]

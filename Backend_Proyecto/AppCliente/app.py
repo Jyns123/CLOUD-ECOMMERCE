@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 # Flask/SQLAlchemy instance
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:utec@52.202.106.35:8005/dbcloud"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:utec@52.206.143.132:8005/dbCliente"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
