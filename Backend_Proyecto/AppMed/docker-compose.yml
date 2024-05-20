@@ -4,7 +4,7 @@ services:
   appmeds:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     container_name: appmeds
     restart: unless-stopped
     ports:

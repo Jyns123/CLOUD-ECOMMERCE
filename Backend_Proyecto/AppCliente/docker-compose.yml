@@ -4,7 +4,7 @@ services:
   appcliente:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     container_name: appcliente
     restart: unless-stopped
     ports:

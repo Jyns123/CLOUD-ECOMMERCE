@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .models import User
 import requests
 
-BACKEND_BASE_URL = "http://18.214.194.0"
+# URL del balanceador de carga
+BACKEND_BASE_URL = "http://PROY-TLS-f20e4defd215dfd4.elb.us-east-1.amazonaws.com"
 
 # Página principal para seleccionar el tipo de usuario
 def index(request):

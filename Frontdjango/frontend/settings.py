@@ -11,7 +11,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
+# Backend service URLs
+AUTH_SERVICE_URL = os.getenv('AUTH_SERVICE_URL', 'http://localhost:5000')
+CLIENT_SERVICE_URL = os.getenv('CLIENT_SERVICE_URL', 'http://localhost:8014')
+MED_SERVICE_URL = os.getenv('MED_SERVICE_URL', 'http://localhost:8016')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

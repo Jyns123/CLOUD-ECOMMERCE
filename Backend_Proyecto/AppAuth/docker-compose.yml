@@ -4,7 +4,7 @@ services:
   appauth:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     container_name: appauth
     restart: unless-stopped
     ports:
